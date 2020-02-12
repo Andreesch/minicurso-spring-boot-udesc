@@ -28,12 +28,17 @@ public class RestaurantService {
 
     public RestaurantResponseDto getById(Integer id) {
         Optional<Restaurant> optional = restaurantRepository.findById(id);
-        Restaurant restaurant =  optional.get();
-        return new RestaurantResponseDto()
-                .setId(restaurant.getId())
-                .setEmail(restaurant.getEmail())
-                .setName(restaurant.getName())
-                .setPhone(restaurant.getPhone());
 
+        if(optional.isPresent()) {
+
+            Restaurant restaurant = optional.get();
+            return new RestaurantResponseDto()
+                    .setId(restaurant.getId())
+                    .setEmail(restaurant.getEmail())
+                    .setName(restaurant.getName())
+                    .setPhone(restaurant.getPhone());
+        }
+
+        return null;
     }
 }

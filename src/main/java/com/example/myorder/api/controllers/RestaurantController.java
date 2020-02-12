@@ -30,6 +30,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
     public RestaurantResponseDto get(@RequestParam @Param("id") Integer id) {
+
         return restaurantService.getById(id);
     }
 }
