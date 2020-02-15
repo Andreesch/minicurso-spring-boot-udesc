@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.myorder.api.dtos.CreateProductDto;
 import com.example.myorder.api.dtos.ProductResponseDto;
 import com.example.myorder.api.dtos.RestaurantResponseDto;
+import com.example.myorder.api.mappers.RestaurantMapper;
 import com.example.myorder.entities.Product;
 import com.example.myorder.entities.Restaurant;
 import com.example.myorder.exceptions.NotFoundException;
@@ -42,7 +43,6 @@ public class ProductService {
                 .setName(product.getName())
                 .setValue(product.getValue())
                 .setRestaurant(restaurantResponseDto);
-
     }
 
     public Product findById(Integer id) {
@@ -52,6 +52,14 @@ public class ProductService {
 
     public List<Product> listById(List<Integer> ids) {
         return productRepository.findAllById(ids);
+    }
+
+    public ProductResponseDto createProductResponseDto(Product product, Restaurant restaurant) {
+        return new ProductResponseDto()
+                .setName(product.getName())
+                .setValue(product.getValue())
+                .setRestaurant(RestaurantMapper.toResponseDto(restaurant));
+
     }
 
 }

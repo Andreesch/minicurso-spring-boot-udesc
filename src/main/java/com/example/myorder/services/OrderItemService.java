@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.myorder.api.dtos.CreateOrderItemDto;
 import com.example.myorder.api.dtos.OrderItemDto;
 import com.example.myorder.entities.Order;
 import com.example.myorder.entities.OrderItem;
@@ -21,20 +22,25 @@ public class OrderItemService {
     @Autowired
     private ProductService productService;
 
-    public List<OrderItem> createOrderItens(List<OrderItemDto> itens, Order order) {
+    public List<OrderItem> createOrderItens(List<CreateOrderItemDto> itens, Order order) {
         return itens.stream()
                 .map(orderItemDto -> buildOrderItem(orderItemDto, order))
                 .collect(Collectors.toList());
     }
 
-    private OrderItem buildOrderItem(OrderItemDto orderItemDto, Order order) {
+    public List<OrderItemDto> buildOrderItemDtos(List<OrderItem> orderItems) {
+       return orderItems.stream().map(orderItem -> new OrderItemDto()
+                .setId(orderItem.getId())
+                .setQuantity(orderItem.getQuantity())
+                .setProductResponse(productService.createProductResponseDto(orderItem.getProduct(), orderItem.getOrder().getRestaurant())))
+                .collect(Collectors.toList());
+    }
+
+    private OrderItem buildOrderItem(CreateOrderItemDto createOrderItemDto, Order order) {
         return new OrderItem()
-                .setProduct(productService.findById(orderItemDto.getProductId()))
+                .setProduct(productService.findById(createOrderItemDto.getProductId()))
                 .setOrder(order)
-                .setQuantity(orderItemDto.getQuantity());
+                .setQuantity(createOrderItemDto.getQuantity());
     }
 
-    private Product find(List<Integer> productsId) {
-
-    }
 }

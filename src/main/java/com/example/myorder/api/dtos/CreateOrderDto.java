@@ -19,7 +19,7 @@ public class CreateOrderDto {
 
     @ApiModelProperty(value = "${order.create.orderItem}")
     @NotEmpty
-    private List<OrderItemDto> orderItens;
+    private List<CreateOrderItemDto> orderItens;
 
     public Integer getUserId() {
         return userId;
@@ -39,11 +39,11 @@ public class CreateOrderDto {
         return this;
     }
 
-    public List<OrderItemDto> getOrderItens() {
+    public List<CreateOrderItemDto> getOrderItens() {
         return orderItens;
     }
 
-    public CreateOrderDto setOrderItens(List<OrderItemDto> orderItens) {
+    public CreateOrderDto setOrderItens(List<CreateOrderItemDto> orderItens) {
         this.orderItens = orderItens;
         return this;
     }

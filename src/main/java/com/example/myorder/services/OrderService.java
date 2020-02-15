@@ -1,16 +1,14 @@
 package com.example.myorder.services;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.myorder.api.dtos.CreateOrderDto;
-import com.example.myorder.api.dtos.OrderItemDto;
+import com.example.myorder.api.dtos.OrderResponseDto;
 import com.example.myorder.entities.Order;
 import com.example.myorder.entities.OrderItem;
-import com.example.myorder.entities.Product;
 import com.example.myorder.enums.OrderStatusEnum;
 import com.example.myorder.repositories.OrderRepository;
 
@@ -32,7 +30,19 @@ public class OrderService {
     @Autowired
     private ProductService productService;
 
-    private Order create(CreateOrderDto createOrderDto) {
+    public OrderResponseDto create(CreateOrderDto createOrderDto) {
+        Order createOrder = createOrder(createOrderDto);
+
+        Order order = orderRepository.save(createOrder);
+
+        return new OrderResponseDto()
+                .setId(order.getId())
+                .setOrderStatus(order.getStatus())
+                .setTotalValue(order.getTotalValue())
+                .setItens(orderItemService.buildOrderItemDtos(order.getItems()));
+    }
+
+    private Order createOrder(CreateOrderDto createOrderDto) {
         Order order = new Order();
         List<OrderItem> itens = orderItemService.createOrderItens(createOrderDto.getOrderItens(), order);
 
